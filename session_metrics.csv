@@ -1,0 +1,9 @@
+date,problem,time_to_code_running_min,time_to_req1_complete_min,reqs_completed,lines_written,pct_coding,pct_teaching,pct_discussion,rubric_score,session_duration_notes
+2026-03-12,Banking Transaction System,81,95,1.5,110,n/a,n/a,n/a,n/a,4.5 hours wall time with interruption
+2026-03-13,Banking Transaction System - Req 3,n/a,n/a,3,145,n/a,n/a,n/a,n/a,~82 min wall time for Req 3 (computer restart mid-session)
+2026-03-13,Bowling Alley System,76,72,2.5,167,45,30,25,9.5/15,Multi-day session with many pauses; reliable active time ~123 min for Reqs 1-2; Req 3 partial; time tracking broke down in segment 4
+2026-03-17,Verkada Motion Intervals,n/a,65,3,n/a,25,55,20,7/15,Wall time ~5hrs; pauses not tracked; Req 1 solid; Req 2 boundary cases required extensive coaching; Req 3 quick and clean
+2026-03-18,Merge Intervals (LeetCode #56 + find_gaps),n/a,n/a,2,53,40,20,40,9/15,Wall time unreliable; 2 reqs completed; self-caught trailing gap bug; cursor pattern internalized; no Req 3
+2026-03-22,Restaurant Kitchen System,n/a,~65,3,~200,40,5,55,10/15,Multi-day session with many pauses; all 3 reqs complete; pct_teaching dropped to ~5% (from 30%); speed still No Hire due to 41min requirements gathering; capacity guard missed then self-fixed via driver
+2026-03-23,Camera Alert Triage (Applied OOP Light),n/a,~20,3,~90,70,10,20,14/15,Active time ~64 min (calculated from pause/resume timestamps); all 3 phases complete; proactive secondary index in Phase 1; all bugs self-caught before driver; first Strong Hire overall score; light difficulty
+2026-03-24,EV Charging Network (Applied OOP Medium),n/a,~26,3,~95,55,5,40,10/15,Active time ~98 min (Reqs 1-2 estimated ~41 min due to session loss; Req 3 = 57 min from timestamps); all 3 phases complete; 0 edge cases missed; Req 3 speed No Hire due to 19min design exploration before coding

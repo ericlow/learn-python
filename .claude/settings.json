@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(.claude/skills)",
+      "Read(.claude)",
+      "Write(.claude)",
+      "Edit(.claude)",
+      "Bash(wc:*)",
+      "Bash(python3:*)",
+      "Bash(date:*)",
+      "Bash(echo:*)",
+      "Bash(cat:*)",
+      "Bash(mkdir:*)",
+      "Bash(sed:*)",
+      "Bash(grep:*)",
+      "Write(/Users/eric/projects/SentryEval/*)",
+      "Edit(/Users/eric/projects/SentryEval/*)"
+    ]
+  }
+}
