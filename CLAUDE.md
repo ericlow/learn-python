@@ -69,6 +69,13 @@ On every conversation start, list these skills
 
 ---
 
+## Session Git Workflow
+
+Each session runs on its own branch: `session/[slug]` (e.g., `session/260515-fitness-activity`).
+The coach creates and checks out this branch at session start, and returns to `main` after session-review.
+
+---
+
 ## File Size Limits
 
 On every conversation start, run these checks using bash `wc -l` — do NOT read the files into memory:

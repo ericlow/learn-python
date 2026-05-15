@@ -26,6 +26,8 @@ Problems are split into 4 files per phase. Load only what is needed for the curr
    Date: YYYY-MM-DD
    Session Start: HH:MM:SS
    ```
+4. Create and checkout a session branch: `git checkout -b session/[slug]`
+   where `[slug]` is the problem's date-slug (e.g., `session/260515-fitness-activity`)
 
 **At each phase transition (after a req completes):**
 1. Re-read `interview-coach` SKILL.md lines 14–57 (Coach Behavior Rules + Session Flow) — restores coaching rules
@@ -193,3 +195,5 @@ date "+%H:%M:%S"
 ### End of Session
 
 When the session ends, hand off to the `session-review` skill (`/session-review`). It handles the full post-mortem: summary report, rubric scoring, time breakdown, and writing results to `session_metrics.csv`.
+
+After session-review completes, return to main: `git checkout main`
