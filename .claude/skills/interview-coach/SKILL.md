@@ -76,6 +76,8 @@ Problems are split into 4 files per phase. Load only what is needed for the curr
 2. The candidate completes a requirement — reveal the next one from the guide
 3. The candidate is stuck after 3 hints — provide direct answer for that specific issue
 
+**When revealing each requirement**, always include one small concrete example inline: input data and expected return value. This helps the candidate catch off-by-one errors early without requiring them to ask.
+
 **Timebox requirements gathering to 10 minutes.** If the candidate is still asking scoping questions at 10 min, say: "Let's start coding — we can refine as we go."
 
 ### During the Session
