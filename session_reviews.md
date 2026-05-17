@@ -321,3 +321,81 @@ Detailed rubric scores and analysis per session. Used to track improvement over 
 - Enum comparison requires `.value` — `PowerLevel.L2 <= PowerLevel.DCFC` fails; use `.value` on both sides
 
 ---
+
+## 2026-05-15 — Fitness Activity Window Analyzer
+
+**Problem:** Sliding window step counter — max window, best window with index, min days to reach target (Algorithmic, 3 reqs)
+**Active Time:** ~85 min estimated (multi-day session; Req 1 ~20 min, Req 2 ~30 min, Req 3 ~35 min active)
+**Reqs Completed:** 3 / 3
+
+### Rubric Scores
+
+| Dimension | Score | Level |
+|-----------|-------|-------|
+| Correctness | 3/3 | Strong Hire |
+| Code Quality | 2/3 | Hire |
+| Data Structures | 3/3 | Strong Hire |
+| Communication | 3/3 | Strong Hire |
+| Speed | 2/3 | Hire |
+| **Total** | **13/15** | **Strong Hire** |
+
+### Dimension Analysis
+
+**Correctness — 3/3 (Strong Hire)**
+- ✅ All 3 reqs complete; all driver cases pass
+- ✅ Req 1: all 7 cases passed; sliding window with running sum correct first pass
+- ✅ Req 2: all 7 cases passed; tie-breaking (`>` not `>=`) and index formula correct
+- ✅ Req 3: 7/8 passed first run; missing `target <= 0` guard added after single prompt
+- ✅ Self-caught double-add bug in Req 1 after guided trace; self-found overwrite bug in Req 3 through trace
+
+**Code Quality — 2/3 (Hire)**
+- ✅ Clean variable names throughout (`total`, `max_total`, `min_days`, `L`, `R`)
+- ✅ Adapted Req 1 code cleanly for Req 2 — didn't rewrite; restored Req 1 return type correctly
+- ✅ Guard clause structure consistent across all three functions
+- ❌ Req 3 had redundant `min_days` tracking in two places — candidate noticed but didn't refactor before finishing
+- ❌ `L < R` condition in Req 3 while loop is more restrictive than needed (works but non-idiomatic)
+
+**Data Structures — 3/3 (Strong Hire)**
+- ✅ Proposed sliding window with running sum independently at Req 1 — no prompting required; explicitly reasoned through queue vs running sum tradeoff
+- ✅ Correctly identified variable-width two-pointer at Req 3 immediately — no fixed-window confusion whatsoever
+- ✅ Two-pointer structure (expand R, shrink L) stated clearly before coding
+
+**Communication — 3/3 (Strong Hire)**
+- ✅ Proactively discussed queue vs running sum at Req 1 before being asked
+- ✅ Reasoned through `(0, 0)` ambiguity at Req 2 — arrived at `(-1, 0)` independently after probe
+- ✅ Identified tie-breaking requirement (`>` not `>=`) without prompting
+- ✅ Asked for a concrete example before coding Req 3 — good instinct; prompted the "include example in reveal" improvement
+- ✅ Walked through approach clearly before every implementation
+- ❌ Complexity answer needed prompting — said O(n²) before being led back to O(n)
+
+**Speed — 2/3 (Hire)**
+- Req 1 active: ~20 min ✅ (on pace)
+- Req 2 active: ~30 min estimated ✅ (reasonable)
+- Req 3 active: ~35 min estimated ✅ (on pace for medium)
+- Total active: ~85 min — Hire threshold; all 3 reqs complete
+- Multi-day session with significant pauses; active time estimates are rough
+
+### Trend Analysis
+
+- **Score trajectory:** 9.5 → 10 → 14 (light OOP) → 10 (medium OOP) → **13 (medium Algo)** — first algorithmic session in this format; 13/15 is the strongest result on a non-light problem; strong signal
+- **pct_teaching:** 30% → 5% → 10% → 5% → ~2% — effectively zero this session; no Python syntax help needed at all ✅ this trend is now fully established
+- **Speed:** All 3 reqs completed in ~85 min active — Hire on speed; not yet Strong Hire, but the multi-day pause structure makes this hard to assess; active time per req is reasonable
+- **Data structures:** Strong Hire for the first time on an algorithmic session — independently proposed sliding window and two-pointer; this is a meaningful signal, not a format artifact
+- **Edge cases:** Listed ~6 edge cases across 3 reqs; missed `target <= 0` return value (needed prompt); improving trend continues but still 1 miss per session
+
+### Key Strengths
+- First truly independent sliding window identification — no complexity probe needed to get to O(n)
+- Immediately pivoted to variable-width window at Req 3 with correct structure; no false starts
+- Python fluency is no longer discussed — pct_teaching ~2%; no syntax blocks anywhere
+
+### Key Improvement Areas
+1. **Complexity articulation** — correct O(n) intuition but couldn't defend it; practice the "each element added once, removed once → O(n)" explanation until automatic
+2. **Code cleanup under time pressure** — noticed the redundant `min_days` tracking but didn't refactor; practice identifying and fixing structural issues before moving on
+3. **Edge case depth on Req 3** — `target <= 0` was discussed explicitly before coding but guard was still missed; close the loop between discussion and implementation
+
+### Flashcard Topics from This Session
+- Two-pointer active time argument — each element is added once and removed at most once → O(n) total, not O(n²)
+- Variable-width sliding window pattern — expand R until condition met, shrink L while condition holds, record inside the while loop before advancing L
+- Sentinel disambiguation — if `(0, 0)` is a valid result, `(-1, 0)` is the correct invalid sentinel; index -1 can never be a valid start
+
+---
