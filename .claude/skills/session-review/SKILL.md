@@ -113,7 +113,13 @@ Analyze trends across the last 3-5 sessions:
 - **Edge cases** — is the ratio of missed-to-listed edge cases improving?
 - **Recurring weaknesses** — are the same improvement areas appearing session after session?
 
-Surface the trend analysis in the detailed write-up below.
+Surface the trend analysis in the detailed write-up below AND present it directly to the candidate in the conversation (not just written to the file). The candidate must see the cross-session table and trend narrative — this is the most important part of the review.
+
+**Present to the candidate in the conversation:**
+1. A cross-session comparison table with columns: Date | Problem | Type | Score | Correctness | Data Structs | Communication | Speed | pct_teaching
+2. A written trend narrative covering score trajectory, pct_teaching, data structures, speed, and edge cases
+3. The full dimension-by-dimension analysis (✅/❌ per dimension) — not just the summary box
+4. Key improvement areas with specific recommendations
 
 ---
 
@@ -213,3 +219,13 @@ Append one row to `session_metrics.csv` with these fields:
 | `edge_cases_missed` | Count of edge cases revealed by driver that candidate missed |
 
 Create the file with a header row if it doesn't exist yet.
+
+---
+
+## Step 5: Git Workflow
+
+1. **Update session notes** — append Req N evaluation to `[problem]_session_notes.md` before committing
+2. **Commit on the session branch** — stage `solution.py` and `problems/` and commit with message: `"Session: [Problem Name] — all N reqs complete"`
+3. **Switch to main** — `git checkout main`
+4. **Write review files** — append to `session_reviews.md` and `session_metrics.csv` on main
+5. **Commit on main** — stage and commit the review files with message: `"Add session review and metrics for [Problem Name]"`
