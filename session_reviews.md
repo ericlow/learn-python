@@ -399,3 +399,79 @@ Detailed rubric scores and analysis per session. Used to track improvement over 
 - Sentinel disambiguation — if `(0, 0)` is a valid result, `(-1, 0)` is the correct invalid sentinel; index -1 can never be a valid start
 
 ---
+
+## 2026-05-19 — Zoo Feeding Sequence Analyzer
+
+**Problem:** Sliding window analysis — most varied fixed window, all unique fixed windows, longest unique variable run (Algorithmic, Easy, 3 reqs)
+**Active Time:** ~133 min (Req 1 ~59 min, Req 2 ~63 min, Req 3 ~11 min; multi-day with many pauses)
+**Reqs Completed:** 3 / 3
+
+### Rubric Scores
+
+| Dimension | Score | Level |
+|-----------|-------|-------|
+| Correctness | 3/3 | Strong Hire |
+| Code Quality | 2/3 | Hire |
+| Data Structures | 2/3 | Hire |
+| Communication | 2/3 | Hire |
+| Speed | 1/3 | No Hire |
+| **Total** | **10/15** | **Hire** |
+
+### Dimension Analysis
+
+**Correctness — 3/3 (Strong Hire)**
+- ✅ All 18 driver cases pass across all 3 reqs
+- ✅ All corner cases handled in final code (empty, k > len, k=1, all-same, all-unique, ties)
+- ✅ Req 3 correct on first run after empty guard added pre-driver
+- ❌ Req 1 required coach-guided traces to find two bugs (pop ordering, partial window evaluation)
+
+**Code Quality — 2/3 (Hire)**
+- ✅ Req 3 clean — guard at top, descriptive names (L, R, window, best_start), while-shrink clearly scoped
+- ✅ Req 2 compact and readable
+- ❌ Req 1 guard is an outer `if k <= len` wrapping the whole body rather than an early return at top
+- ❌ Rolling counter described but not implemented in Req 2 — used `set(window)` rebuild instead
+
+**Data Structures — 2/3 (Hire)**
+- ✅ Req 3: clean variable-size sliding window with set + while-shrink — correct and efficient
+- ✅ Identified O(n*k) vs O(n) tradeoff explicitly for Req 2
+- ❌ Req 2 uses `set(window)` rebuilt each iteration — O(n*k); knew better and didn't do it
+- ❌ Req 1 uses `list.pop(0)` — O(k) per slide; L-pointer would have been cleaner
+
+**Communication — 2/3 (Hire)**
+- ✅ Asked clarifying questions before coding each req
+- ✅ Articulated O(n*k) vs O(n) tradeoff explicitly
+- ✅ Correctly identified while loop need for Req 3 before coding
+- ❌ Initial interface confusion — proposed event registration + timestamps instead of list[str]
+- ❌ Described rolling map for Req 1 then switched to list without clear reasoning
+
+**Speed — 1/3 (No Hire)**
+- Req 1: ~59 min (target: ~20 min) ❌
+- Req 2: ~63 min (target: ~15 min) ❌
+- Req 3: ~11 min (target: ~15 min) ✅
+- Primary causes: approach deliberation (planned 3 implementations), 2 bugs requiring hint chains in Req 1
+
+### Trend Analysis
+
+- **Score trajectory:** 9.5 → 10 → 14 (light) → 10 (med OOP) → 13 (med algo) → 10 (easy algo) — regression on an easy problem; last session was 13 on medium
+- **pct_teaching:** 30% → 5% → 10% → 5% → 2% → ~20% — significant regression; sliding window mechanics (pop ordering, window evaluation timing, while vs if) required re-teaching despite being covered in Fitness Activity 3 days prior
+- **Speed:** No Hire again; Req 1 alone took 59 min; Req 3 took 11 min showing the pattern is there when candidate trusts themselves
+- **Recurring weakness:** Identifies better data structure, implements simpler one — 3rd session in a row (Restaurant Kitchen, EV Charging, Zoo Feeding)
+- **Edge cases:** Slight regression — all-same caught by driver in Req 1 (last session: 0 caught by driver)
+
+### Key Strengths
+- Req 3 cleanly implemented in 11 min — correct variable window approach from the start; shows pattern is internalized when candidate trusts themselves
+- Correctness 3/3 — all 18 cases pass; debugs correctly when tracing
+- Self-identified pop >= vs > bug through guided trace
+
+### Key Improvement Areas
+1. **Commit to one approach before coding** — planned 3 implementations, debated deque vs list vs map extensively; in a real interview this signals indecision and costs time; pick one, state the tradeoff, code it
+2. **Implement the O(n) solution when you know it** — described rolling counter at the start of Req 1 and Req 2, used slower approach both times; if you know the better way, do it — or explicitly say you're deferring optimization
+3. **Sliding window mechanics need drilling** — pop(0) cost, window eval timing, while vs if for shrink all required hints this session despite being covered in the prior algo session
+
+### Flashcard Topics from This Session
+- `list.pop(0)` is O(k) — prefer an L-pointer (`feedings[L]`, `L += 1`) to avoid element shift cost
+- Window evaluation timing — only evaluate when `len(window) == k`; pop condition is `> k` not `>= k`
+- `while` not `if` for shrink — single left-advance may not resolve duplicate if the prior occurrence isn't at L
+- Rolling counter — `freq[x] += 1; if freq[x] == 2: duplicates += 1`; reverse on remove; `if duplicates == 0` checks uniqueness in O(1)
+
+---
