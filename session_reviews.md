@@ -475,3 +475,83 @@ Detailed rubric scores and analysis per session. Used to track improvement over 
 - Rolling counter — `freq[x] += 1; if freq[x] == 2: duplicates += 1`; reverse on remove; `if duplicates == 0` checks uniqueness in O(1)
 
 ---
+
+## 2026-05-31 — Savings Goal Manager
+
+**Problem:** Banking savings goal feature — create/contribute/cancel by goal_id, contribute by customer_id, find closest to target (Applied OOP, Easy, 3 reqs)
+**Active Time:** ~157 min estimated (Req 1 ~60 min, Req 2 ~30 min, Req 3 ~67 min from timestamps; multi-day session, code wiped between May 20–22)
+**Reqs Completed:** 3 / 3
+
+### Rubric Scores
+
+| Dimension | Score | Level |
+|-----------|-------|-------|
+| Correctness | 2/3 | Hire |
+| Code Quality | 2/3 | Hire |
+| Data Structures | 2/3 | Hire |
+| Communication | 2/3 | Hire |
+| Speed | 1/3 | No Hire |
+| **Total** | **9/15** | **Hire** |
+
+### Dimension Analysis
+
+**Correctness — 2/3 (Hire)**
+- ✅ All Phase 1 driver cases passed (12 cases including auto-complete, duplicate-customer, cap on overshoot)
+- ✅ All Phase 2 driver cases passed (get_customer_goal, contribute_for_customer, re-create after completion)
+- ✅ All Phase 3 driver cases passed after two self-corrected bugs
+- ❌ Phase 3 initial implementation missing active-status filter — returned cancelled goals
+- ❌ Phase 3 initialization of closest_percent=0 excluded 0%-progress goals — caught via probing
+
+**Code Quality — 2/3 (Hire)**
+- ✅ contribute_for_customer correctly delegates to contribute() — no duplicated validation
+- ✅ Phase 3 logic readable and correct after fixes
+- ❌ Validation order in contribute() puts amount check before existence check — spec deviation
+- ❌ Comments left throughout code; else-fallthrough pattern in create_goal harder to follow than early-return
+- ❌ contribute_for_customer re-validates amount <= 0 before delegating — minor duplication
+- ❌ Phase 3: manual loop + tracker pattern is more verbose than filter-then-max
+
+**Data Structures — 2/3 (Hire)**
+- ✅ Proactively added secondary dict (customers) in Phase 1 — correct forward-thinking setup
+- ✅ Used for O(1) lookup in Phase 2 — no linear scan
+- ❌ customers dict not cleaned up on auto-complete or cancel_goal — stale entries; works because get_customer_goal status-checks, but dict is not truly maintained
+- ❌ Phase 3: no explicit filter list; manual loop is functional but secondary index could have helped
+
+**Communication — 2/3 (Hire)**
+- ✅ Strong Phase 3 edge case enumeration upfront (6 cases listed including 0%-progress goals and ties)
+- ✅ Asked the right clarifying question about percentage vs absolute value before coding
+- ✅ Identified tie-breaking requirement independently
+- ✅ Challenged non-active goal contribute spec in Phase 1 (healthy push)
+- ❌ Not consistently narrating tradeoffs across all phases; design reasoning largely implicit
+
+**Speed — 1/3 (No Hire)**
+- Req 1: ~60 min active (target: 12–15 min) ❌
+- Req 2: ~30 min estimated (target: 8–12 min) ❌
+- Req 3: ~67 min active (target: 8–10 min) ❌
+- Context: code was wiped between May 20–22; session fragmented over 11 calendar days; active time estimates are rough
+- All 3 reqs complete — did not score 0 on speed
+
+### Trend Analysis
+
+- **Score trajectory:** 9.5 → 10 → 14 (light OOP) → 10 (med OOP) → 13 (med Algo) → 10 (easy Algo) → **9 (easy OOP)** — modest regression; speed is the consistent drag
+- **pct_teaching:** 30% → 5% → 10% → 5% → 2% → 20% → **~5%** — recovered from Zoo Feeding regression; Python fluency holds when not dealing with new mechanical patterns
+- **Speed:** Consistent No Hire on speed across all medium/easy sessions; multi-day session structure makes this metric noisy but the per-req times suggest real slowness regardless
+- **Data structures:** Secondary dict set up proactively for the 3rd session in a row ✅; still not cleaning it up on state transitions — same gap as Camera Alert Triage and EV Charging
+- **Edge cases:** Phase 3 listed 6 cases including the tricky 0% case; missed status filter (structural, not edge case); Phase 1 missed overshoot cap; improvement vs Zoo Feeding (0 missed this session, 1 missed)
+
+### Key Strengths
+- Proactive secondary dict setup in Phase 1 without prompting — consistently forward-thinking on data structures
+- Strong Phase 3 edge case reasoning: identified percentage vs absolute trap, 0% initialization bug, and tie-breaking before coding
+- contribute_for_customer delegation pattern correct — no validation duplication
+- Self-corrected both Phase 3 bugs without hints after driver/probe
+
+### Key Improvement Areas
+1. **Secondary dict maintenance** — set up in Phase 1 but not cleaned up on auto-complete or cancel; this is the 3rd session this gap has appeared; add cleanup to contribute() and cancel_goal() when status transitions occur
+2. **Early-return pattern** — create_goal and cancel_goal use else-fallthrough instead of guard clauses; practice writing: if condition: raise; then proceed; this removes nesting and makes intent clearer
+3. **Speed** — per-req times are 4–8× the targets; Phase 3 was 67 min on a function that should take 8–10 min; some of this is session structure, but consider drilling filter-then-max patterns to execute faster
+
+### Flashcard Topics from This Session
+- Secondary dict cleanup pattern — `del self.customers[customer_id]` or overwrite on every status transition that makes a customer inactive; decide once and do it everywhere
+- filter-then-max idiom — `active = [g for g in self.goals.values() if g.status == "active"]`; `if not active: raise ValueError(...)`; `return max(active, key=lambda g: g.current_amount / g.target_amount)`
+- Initialization trap for manual max loop — start with `-1` or `-float('inf')`, never `0`, when the valid range includes 0; or use filter-then-max to avoid the trap entirely
+
+---
