@@ -24,3 +24,8 @@ date,category,secs_to_first_done,secs_bug_fixes,secs_idiomatic_delta,secs_total,
 2026-03-27,fstring,173,0,82,261,0,1
 2026-03-27,sets,253,0,40,298,0,3
 2026-03-27,sorting,230,0,0,235,0,2
+2026-06-01,heapq,409,0,78,487,2,8
+2026-06-01,list-comp,272,153,75,500,2,2
+2026-06-01,fstring,513,0,0,513,3,1
+2026-06-02,sets,,532,511,1043,3,4
+2026-06-02,sorting,506,104,0,610,1,2

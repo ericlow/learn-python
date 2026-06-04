@@ -457,3 +457,19 @@ Idiom delta (secs_idiomatic_delta, target 0s)
   03-27 s3   |░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░| 0s ✅
 ```
 
+
+---
+
+## 2026-06-01 — Session (partial, 1 drill)
+
+### Drill 1 — heapq
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 409s | < 300s | ❌ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | — | 0s | (session ended before idiom phase) |
+| hints_used | 2 | 0 | ❌ |
+| lines_written | 8 | — | |
+
+**Analysis:** Correct on first run — push-all-then-pop-k approach with negated tuple keys worked. Two hints used: one for the min-heap/negation pattern, one for tuple tie-break ordering. Speed at 409s was over target; the design discussion before starting (heappush vs convenience functions) ate into the clock. Idiom note pending for next session: `for i in range(3)` should use `_` for the unused loop variable.

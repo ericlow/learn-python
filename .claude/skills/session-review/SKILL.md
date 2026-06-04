@@ -115,11 +115,16 @@ Analyze trends across the last 3-5 sessions:
 
 Surface the trend analysis in the detailed write-up below AND present it directly to the candidate in the conversation (not just written to the file). The candidate must see the cross-session table and trend narrative — this is the most important part of the review.
 
-**Present to the candidate in the conversation:**
-1. A cross-session comparison table with columns: Date | Problem | Type | Score | Correctness | Data Structs | Communication | Speed | pct_teaching
-2. A written trend narrative covering score trajectory, pct_teaching, data structures, speed, and edge cases
-3. The full dimension-by-dimension analysis (✅/❌ per dimension) — not just the summary box
-4. Key improvement areas with specific recommendations
+**Present ALL of the following to the candidate in the conversation — every item, every session:**
+1. **Cross-session rubric table** — Date | Problem | Type | Score | Correctness | Data Structs | Communication | Speed | pct_teaching
+2. **Time breakdown trend table** — Date | Problem | pct_coding | pct_teaching | pct_discussion | Score — this shows progress on Python fluency and time allocation
+3. **Written trend narrative** — score trajectory, pct_teaching, data structures, speed, edge cases
+4. **Full dimension-by-dimension analysis** (✅/❌ per dimension) — not just the summary box
+5. **Key strengths** — what went well this session
+6. **Key improvement areas** with specific recommendations
+7. **Flashcard topics** from this session
+
+The candidate must see all of this. Do not summarize or omit — progress data (positive or negative) is what the candidate is here for.
 
 ---
 

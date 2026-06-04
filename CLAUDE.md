@@ -59,6 +59,7 @@ On every conversation start, list these skills
 - `/db-interview-coach` — run a database practice session (also auto-invoked after db-problem-gen finishes)
 - `/db-session-review` — end-of-DB-session report, rubric scoring, and write results to db_session_metrics.csv
 - `/mechanical-drills` — timed single-mechanic Python drills to build fluency (tracks to drill_metrics.csv)
+- `/fundamentals-screen` — 4–6 standalone exercises at the fluency + design awareness tier; mirrors real fundamentals screens (tracks to screen_metrics.csv)
 
 ---
 

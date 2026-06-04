@@ -129,7 +129,7 @@ Then compare current session vs past sessions using `drill_metrics.csv`:
 
 ## drill_metrics.csv
 
-Path: `/Users/eric/projects/SentryEval/drill_metrics.csv`
+Path: `/Users/eric/projects/learn-python/drill_metrics.csv`
 Columns: `date,category,secs_to_first_done,secs_bug_fixes,secs_idiomatic_delta,secs_total,hints_used,lines_written`
 
 - `date`: YYYY-MM-DD
