@@ -29,6 +29,8 @@ is always trivial in scope — the only challenge is writing it correctly and fa
 | `heapq` | Priority queue patterns | `heappush`, `heappop`, `nlargest`/`nsmallest`, tuple entries for tie-breaking |
 | `deque` | Queue and window patterns | `appendleft`, `popleft`, `maxlen`; BFS queue and sliding window |
 | `stdin-parse` | Input parsing | `split()`, `strip()`, `int()`/`float()` conversion — basic only |
+| `zip-enumerate` | Paired and indexed iteration | `zip()` over two lists, `enumerate()` with index, `zip` + `dict()` to build mappings |
+| `dict-comp` | Dictionary comprehension | `{k: v for ...}`, conditional `{k: v for ... if ...}`, inverting a dict — distinct from list-comp |
 
 ---
 
@@ -52,9 +54,9 @@ Tell the user: "Today's categories: X, X, X, X, X. Starting with drill 1/5."
 ### Step 2 — Per-drill loop (repeat 5 times)
 
 **Present the drill**
-- Show category label, problem statement, input/output example, "Target: 5 min"
+- Show category label, problem statement, and a single input/output example. Nothing else — do not call out tricky details, edge cases, or hints in the presentation.
 - Generate `drills/drill_N.py` using the **Write tool** (not `cat` heredoc via Bash — quote chars in `#` comments trigger approval prompts). Read the existing file first if it exists, then overwrite with Write. Keep the expected output comment on a single line to avoid embedded quotes across lines.
-- The function must include a docstring with the full problem instructions — do not rely on the chat window. The candidate should be able to read the file and know exactly what to implement without referring back to the conversation.
+- The function must include a docstring with the full problem instructions — do not rely on the chat window. The candidate should be able to read the file and know exactly what to implement without referring back to the conversation. The docstring must also not call out tricky details.
 - Say "Let me know when you're ready to start."
 
 **When user says ready/go/start:**
@@ -123,7 +125,7 @@ Then compare current session vs past sessions using `drill_metrics.csv`:
 - Note any cross-session patterns (e.g. idiom delta consistently high, specific categories always slow)
 - Render ASCII bar charts for speed and idiom delta — one row per historical instance, bars scaled to the max value in that category, ✅/❌ against targets (speed ≤300s, idiom = 0s)
 
-**Immediately write** the full session summary table, cross-session trend breakdown, and ASCII bar charts to today's entry in `drill_reviews.md` — do not wait for user confirmation.
+**Render all of the above in chat** (session table, intra-session trends, cross-session trend tables, ASCII bar charts). Then **immediately write** the same content to today's entry in `drill_reviews.md` — do not wait for user confirmation.
 
 ---
 

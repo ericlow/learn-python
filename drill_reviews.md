@@ -473,3 +473,252 @@ Idiom delta (secs_idiomatic_delta, target 0s)
 | lines_written | 8 | — | |
 
 **Analysis:** Correct on first run — push-all-then-pop-k approach with negated tuple keys worked. Two hints used: one for the min-heap/negation pattern, one for tuple tie-break ordering. Speed at 409s was over target; the design discussion before starting (heappush vs convenience functions) ate into the clock. Idiom note pending for next session: `for i in range(3)` should use `_` for the unused loop variable.
+
+---
+
+## 2026-06-05 — Session (5 drills)
+
+### Session Summary Table
+
+| # | Category | secs_to_first_done | secs_bug_fixes | secs_idiomatic_delta | secs_total | hints | lines | clean_submit |
+|---|---|---|---|---|---|---|---|---|
+| 1 | heapq | 319s | 0s | 748s | 1067s | 1 | 3 | ❌ |
+| 2 | list-comp | 699s | 98s | 44s | 841s | 2 | 1 | ❌ |
+| 3 | sets | — | 0s | 77s | 77s | 0 | 2 | ❌ |
+| 4 | fstring | 388s | 35s | 0s | 423s | 1 | 1 | ❌ |
+| 5 | sorting | 179s | 75s | 64s | 318s | 1 | 2 | ❌ |
+
+**Intra-session trends:**
+- Speed improved across the session: 319 → 699 → — → 388 → 179. Drill 5 was the fastest.
+- Hints flat at 1 per drill except drill 3 (0) and drill 2 (2). No improvement within session.
+- No clean submits: every drill had either a bug or an idiom issue.
+
+---
+
+### Drill 1 — heapq
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 319s | <300s | ❌ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 748s | 0s | ❌ |
+| hints_used | 1 | 0 | ❌ |
+| lines_written | 3 | — | |
+
+**Analysis:** Correct on first run. The large idiom delta came from starting with `heapify + nsmallest` together (redundant) and using a for-loop instead of a list comprehension with index access — two separate fixes needed. The core insight (negate scores, use tuples for tie-breaking) was solid.
+
+---
+
+### Drill 2 — list-comp
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 699s | <300s | ❌ |
+| secs_bug_fixes | 98s | 0s | ❌ |
+| secs_idiomatic_delta | 44s | 0s | ❌ |
+| hints_used | 2 | 0 | ❌ |
+| lines_written | 1 | — | |
+
+**Analysis:** Slowest drill of the session. Initial strategy was wrong — tried to split all lines into words and filter numeric words, losing line context. Once redirected to filter at the line level (startswith), the implementation was quick. The `.upper()` bug (case-insensitive match) cost 98s of bug fixes.
+
+---
+
+### Drill 3 — sets
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | — | <300s | — |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 77s | 0s | ❌ |
+| hints_used | 0 | 0 | ✅ |
+| lines_written | 2 | — | |
+
+**Analysis:** No start signal so speed not measured, but user noted it took about 1 minute — consistent with the logic being clear. Zero hints, zero bugs. Only issue was `set([...])` wrapping a list comprehension instead of using a set comprehension directly.
+
+---
+
+### Drill 4 — fstring
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 388s | <300s | ❌ |
+| secs_bug_fixes | 35s | 0s | ❌ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| hints_used | 1 | 0 | ❌ |
+| lines_written | 1 | — | |
+
+**Analysis:** Needed a hint for `:.2f` colon syntax. Two small bugs: missing `$` and a trailing space. Once fixed, the fstring structure was fully idiomatic — second consecutive session with clean idiom on fstring.
+
+---
+
+### Drill 5 — sorting
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 179s | <300s | ✅ |
+| secs_bug_fixes | 75s | 0s | ❌ |
+| secs_idiomatic_delta | 64s | 0s | ❌ |
+| hints_used | 1 | 0 | ❌ |
+| lines_written | 2 | — | |
+
+**Analysis:** Fastest first-done of the session and fastest sorting speed ever (179s). Needed one hint for the lambda tuple syntax. Bug was returning full tuples instead of extracting IDs — a quick fix once flagged. Idiom issue was using `id` as a variable name (shadows Python builtin).
+
+---
+
+### Cross-Session Trend Breakdown
+
+#### heapq
+
+| Instance | secs_to_first_done | secs_idiomatic_delta |
+|---|---|---|
+| 03-26 #1 | 407s | 5s |
+| 03-26 #2 | 1047s | 881s |
+| 03-27 #1 | 541s | 493s |
+| 03-27 #2 | 168s | 112s |
+| 06-01    | 409s | 78s |
+| 06-05    | 319s | **748s** |
+
+Speed is improving (319 is 2nd best). Idiom delta regressed sharply — the heapify+nsmallest anti-pattern was new and took long to unpack. Core tuple/negation pattern is solid; the idiom delta is about knowing which heapq functions compose well.
+
+```
+heapq — secs_to_first_done (target ≤300s, max=1047s)
+03-26 #1  ████████░░░░░░░░░░░░  407s ❌
+03-26 #2  ████████████████████  1047s ❌
+03-27 #1  ██████████░░░░░░░░░░  541s ❌
+03-27 #2  ███░░░░░░░░░░░░░░░░░  168s ✅
+06-01     ████████░░░░░░░░░░░░  409s ❌
+06-05     ██████░░░░░░░░░░░░░░  319s ❌
+
+heapq — secs_idiomatic_delta (target =0s, max=881s)
+03-26 #1  █░░░░░░░░░░░░░░░░░░░  5s ❌
+03-26 #2  ████████████████████  881s ❌
+03-27 #1  ███████████░░░░░░░░░  493s ❌
+03-27 #2  ███░░░░░░░░░░░░░░░░░  112s ❌
+06-01     ██░░░░░░░░░░░░░░░░░░  78s ❌
+06-05     █████████████████░░░  748s ❌
+```
+
+#### list-comp
+
+| Instance | secs_to_first_done | secs_idiomatic_delta |
+|---|---|---|
+| 03-26 #1 | 110s | 76s |
+| 03-26 #2 | 632s | 111s |
+| 03-26 #3 | 457s | 126s |
+| 03-27 #1 | 545s | 45s |
+| 03-27 #2 | 218s | 283s |
+| 06-01    | 272s | 75s |
+| 06-05    | **699s** | 44s |
+
+Speed regressed (slowest ever) due to wrong initial strategy. Idiom delta is near best (44s). The idiom pattern is getting cleaner; strategy selection is the remaining gap.
+
+```
+list-comp — secs_to_first_done (target ≤300s, max=699s)
+03-26 #1  ███░░░░░░░░░░░░░░░░░  110s ✅
+03-26 #2  ██████████████████░░  632s ❌
+03-26 #3  █████████████░░░░░░░  457s ❌
+03-27 #1  ████████████████░░░░  545s ❌
+03-27 #2  ██████░░░░░░░░░░░░░░  218s ✅
+06-01     ████████░░░░░░░░░░░░  272s ✅
+06-05     ████████████████████  699s ❌
+
+list-comp — secs_idiomatic_delta (target =0s, max=283s)
+03-26 #1  █████░░░░░░░░░░░░░░░  76s ❌
+03-26 #2  ████████░░░░░░░░░░░░  111s ❌
+03-26 #3  █████████░░░░░░░░░░░  126s ❌
+03-27 #1  ███░░░░░░░░░░░░░░░░░  45s ❌
+03-27 #2  ████████████████████  283s ❌
+06-01     █████░░░░░░░░░░░░░░░  75s ❌
+06-05     ███░░░░░░░░░░░░░░░░░  44s ❌
+```
+
+#### sets
+
+| Instance | secs_to_first_done | secs_idiomatic_delta |
+|---|---|---|
+| 03-26 #1 | 357s | 0s |
+| 03-26 #2 | 777s | 87s |
+| 03-27 #1 | 189s | 71s |
+| 03-27 #2 | 253s | 40s |
+| 06-02    | — | 511s |
+| 06-05    | — | **77s** |
+
+Idiom delta recovered strongly from 511s (06-02) to 77s. The `set([...])` habit is persisting but shrinking. Speed not measured in last two sessions.
+
+```
+sets — secs_to_first_done (target ≤300s, max=777s) [entries with data only]
+03-26 #1  █████████░░░░░░░░░░░  357s ❌
+03-26 #2  ████████████████████  777s ❌
+03-27 #1  █████░░░░░░░░░░░░░░░  189s ✅
+03-27 #2  ███████░░░░░░░░░░░░░  253s ✅
+
+sets — secs_idiomatic_delta (target =0s, max=511s)
+03-26 #1  ░░░░░░░░░░░░░░░░░░░░  0s ✅
+03-26 #2  ███░░░░░░░░░░░░░░░░░  87s ❌
+03-27 #1  ███░░░░░░░░░░░░░░░░░  71s ❌
+03-27 #2  ██░░░░░░░░░░░░░░░░░░  40s ❌
+06-02     ████████████████████  511s ❌
+06-05     ███░░░░░░░░░░░░░░░░░  77s ❌
+```
+
+#### fstring
+
+| Instance | secs_to_first_done | secs_idiomatic_delta |
+|---|---|---|
+| 03-27 #1 | 373s | 55s |
+| 03-27 #2 | 281s | 203s |
+| 03-27 #3 | 173s | 82s |
+| 06-01    | 513s | 0s |
+| 06-05    | 388s | 0s |
+
+Two consecutive clean idiom phases — the fstring pattern is internalised. Speed is inconsistent; the `:.2f` hint cost time today.
+
+```
+fstring — secs_to_first_done (target ≤300s, max=513s)
+03-27 #1  ███████████████░░░░░  373s ❌
+03-27 #2  ███████████░░░░░░░░░  281s ✅
+03-27 #3  ███████░░░░░░░░░░░░░  173s ✅
+06-01     ████████████████████  513s ❌
+06-05     ███████████████░░░░░  388s ❌
+
+fstring — secs_idiomatic_delta (target =0s, max=203s)
+03-27 #1  █████░░░░░░░░░░░░░░░  55s ❌
+03-27 #2  ████████████████████  203s ❌
+03-27 #3  ████████░░░░░░░░░░░░  82s ❌
+06-01     ░░░░░░░░░░░░░░░░░░░░  0s ✅
+06-05     ░░░░░░░░░░░░░░░░░░░░  0s ✅
+```
+
+#### sorting
+
+| Instance | secs_to_first_done | secs_idiomatic_delta |
+|---|---|---|
+| 03-26 #1 | 388s | 0s |
+| 03-26 #2 | 729s | 123s |
+| 03-26 #3 | 508s | 0s |
+| 03-27 #1 | — | 0s |
+| 03-27 #2 | 230s | 0s |
+| 06-02    | 506s | 0s |
+| 06-05    | **179s** | 64s |
+
+Speed is a clear personal best (179s). Idiom delta regressed after a streak of 0s — the `id` builtin shadowing issue. The multi-key negation pattern is well-internalised; variable naming is the new gap.
+
+```
+sorting — secs_to_first_done (target ≤300s, max=729s)
+03-26 #1  ███████████░░░░░░░░░  388s ❌
+03-26 #2  ████████████████████  729s ❌
+03-26 #3  ██████████████░░░░░░  508s ❌
+03-27 #2  ██████░░░░░░░░░░░░░░  230s ✅
+06-02     ██████████████░░░░░░  506s ❌
+06-05     █████░░░░░░░░░░░░░░░  179s ✅
+
+sorting — secs_idiomatic_delta (target =0s, max=123s)
+03-26 #1  ░░░░░░░░░░░░░░░░░░░░  0s ✅
+03-26 #2  ████████████████████  123s ❌
+03-26 #3  ░░░░░░░░░░░░░░░░░░░░  0s ✅
+03-27 #1  ░░░░░░░░░░░░░░░░░░░░  0s ✅
+03-27 #2  ░░░░░░░░░░░░░░░░░░░░  0s ✅
+06-02     ░░░░░░░░░░░░░░░░░░░░  0s ✅
+06-05     ██████████░░░░░░░░░░  64s ❌
+```
+
