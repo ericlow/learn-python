@@ -476,7 +476,7 @@ Idiom delta (secs_idiomatic_delta, target 0s)
 
 ---
 
-## 2026-06-05 — Session (5 drills)
+## 2026-06-05 — Session (6 drills)
 
 ### Session Summary Table
 
@@ -487,11 +487,15 @@ Idiom delta (secs_idiomatic_delta, target 0s)
 | 3 | sets | — | 0s | 77s | 77s | 0 | 2 | ❌ |
 | 4 | fstring | 388s | 35s | 0s | 423s | 1 | 1 | ❌ |
 | 5 | sorting | 179s | 75s | 64s | 318s | 1 | 2 | ❌ |
+| 6 | heapq | 196s | 0s | 0s | 208s | 0 | 3 | ✅ |
 
-**Intra-session trends:**
-- Speed improved across the session: 319 → 699 → — → 388 → 179. Drill 5 was the fastest.
+**Intra-session trends (session 1):**
+- Speed improved across session 1: 319 → 699 → — → 388 → 179. Drill 5 was the fastest.
 - Hints flat at 1 per drill except drill 3 (0) and drill 2 (2). No improvement within session.
-- No clean submits: every drill had either a bug or an idiom issue.
+- No clean submits in session 1: every drill had either a bug or an idiom issue.
+
+**Session 2 (drill 6):**
+- heapq: 196s ✅, 0 bugs ✅, 0 idiom delta ✅ — first clean heapq submit ever. Tuple tie-breaking clicked.
 
 ---
 
@@ -565,6 +569,20 @@ Idiom delta (secs_idiomatic_delta, target 0s)
 
 ---
 
+### Drill 6 — heapq (Session 2)
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 196s | <300s | ✅ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| hints_used | 0 | 0 | ✅ |
+| lines_written | 3 | — | |
+
+**Analysis:** First clean heapq submit. The `heapify` + list comp pop pattern applied immediately. Key insight absorbed: `(cost, name)` tuples let Python handle tie-breaking automatically — no extra code needed.
+
+---
+
 ### Cross-Session Trend Breakdown
 
 #### heapq
@@ -576,26 +594,29 @@ Idiom delta (secs_idiomatic_delta, target 0s)
 | 03-27 #1 | 541s | 493s |
 | 03-27 #2 | 168s | 112s |
 | 06-01    | 409s | 78s |
-| 06-05    | 319s | **748s** |
+| 06-05 #1 | 319s | 748s |
+| 06-05 #2 | **196s** | **0s** |
 
-Speed is improving (319 is 2nd best). Idiom delta regressed sharply — the heapify+nsmallest anti-pattern was new and took long to unpack. Core tuple/negation pattern is solid; the idiom delta is about knowing which heapq functions compose well.
+Best speed ever (196s, under 300s for the first time). First ever 0s idiom delta — the tuple tie-breaking insight (Python tuple comparison is automatic, no extra code needed) clicked in the explanation phase and carried immediately into the next attempt.
 
 ```
 heapq — secs_to_first_done (target ≤300s, max=1047s)
-03-26 #1  ████████░░░░░░░░░░░░  407s ❌
-03-26 #2  ████████████████████  1047s ❌
-03-27 #1  ██████████░░░░░░░░░░  541s ❌
-03-27 #2  ███░░░░░░░░░░░░░░░░░  168s ✅
-06-01     ████████░░░░░░░░░░░░  409s ❌
-06-05     ██████░░░░░░░░░░░░░░  319s ❌
+03-26 #1   ████████░░░░░░░░░░░░  407s ❌
+03-26 #2   ████████████████████  1047s ❌
+03-27 #1   ██████████░░░░░░░░░░  541s ❌
+03-27 #2   ███░░░░░░░░░░░░░░░░░  168s ✅
+06-01      ████████░░░░░░░░░░░░  409s ❌
+06-05 #1   ██████░░░░░░░░░░░░░░  319s ❌
+06-05 #2   ████░░░░░░░░░░░░░░░░  196s ✅
 
 heapq — secs_idiomatic_delta (target =0s, max=881s)
-03-26 #1  █░░░░░░░░░░░░░░░░░░░  5s ❌
-03-26 #2  ████████████████████  881s ❌
-03-27 #1  ███████████░░░░░░░░░  493s ❌
-03-27 #2  ███░░░░░░░░░░░░░░░░░  112s ❌
-06-01     ██░░░░░░░░░░░░░░░░░░  78s ❌
-06-05     █████████████████░░░  748s ❌
+03-26 #1   █░░░░░░░░░░░░░░░░░░░  5s ❌
+03-26 #2   ████████████████████  881s ❌
+03-27 #1   ███████████░░░░░░░░░  493s ❌
+03-27 #2   ███░░░░░░░░░░░░░░░░░  112s ❌
+06-01      ██░░░░░░░░░░░░░░░░░░  78s ❌
+06-05 #1   █████████████████░░░  748s ❌
+06-05 #2   ░░░░░░░░░░░░░░░░░░░░  0s ✅
 ```
 
 #### list-comp
@@ -722,3 +743,191 @@ sorting — secs_idiomatic_delta (target =0s, max=123s)
 06-05     ██████████░░░░░░░░░░  64s ❌
 ```
 
+
+## 2026-07-23
+
+### Drill 1 — heapq
+
+| Metric | Value | Target |
+|---|---|---|
+| secs_to_first_done | 483s | < 300s ❌ |
+| secs_bug_fixes | 61s | 0s ❌ |
+| secs_idiomatic_delta | 0s | 0s ✅ |
+| secs_total | 544s | — |
+| hints_used | 0 | 0 ✅ |
+| lines_written | 7 | — |
+
+Used heapify + heappop loop with inverted tuples for tie-breaking — correct approach. Bug: looped over `len(new_list)` instead of `k`, returning all items. Core mechanic was solid; missed the stopping condition. No hints needed.
+
+**Cross-drill trend (so far):** 1 drill in. Speed still slow for heapq (483s vs 300s target), consistent with history where heapq routinely exceeds 300s.
+
+### Drill 2 — list-comp
+
+| Metric | Value | Target |
+|---|---|---|
+| secs_to_first_done | 293s | < 300s ✅ |
+| secs_bug_fixes | 0s | 0s ✅ |
+| secs_idiomatic_delta | 614s | 0s ❌ |
+| secs_total | 907s | — |
+| hints_used | 0 | 0 ✅ |
+| lines_written | 7 | — |
+
+Fast and correct on first check (for loop). Rewrote as a list comp after the idiom flag — the fix landed correctly but took ~10 min. No bugs, no hints. Consistent pattern: list-comp logic is solid, but the idiomatic form doesn't come first.
+
+**Cross-drill trend:** 2 drills in. Speed improving (483s → 293s). Zero bugs both times. Idiom delta is the persistent gap — 0s on heapq, 614s on list-comp. List-comp idiom delta has been ❌ in every session.
+
+### Drill 3 — sets
+
+| Metric | Value | Target |
+|---|---|---|
+| secs_to_first_done | 175s | < 300s ✅ |
+| secs_bug_fixes | 36s | 0s ❌ |
+| secs_idiomatic_delta | 0s | 0s ✅ |
+| secs_total | 211s | — |
+| hints_used | 1 | 0 — |
+| lines_written | 1 | — |
+
+Needed 1 hint to land on set difference (`-` operator). Missing `sorted()` was the only bug — quick fix. Final solution was a clean one-liner. Speed well under target.
+
+**Cross-drill trend:** 3 drills in. Speed: 483s → 293s → 175s — consistently improving. Idiom: 0s, 614s, 0s — list-comp is the outlier. Bug fixes present on drills 1 and 3 (off-by-one on k, missing sorted). Simple errors, quick fixes.
+
+### Drill 4 — fstring
+
+| Metric | Value | Target |
+|---|---|---|
+| secs_to_first_done | 278s | < 300s ✅ |
+| secs_bug_fixes | 1586s | 0s ❌ |
+| secs_idiomatic_delta | 0s | 0s ✅ |
+| secs_total | 1864s | — |
+| hints_used | 2 | 0 ❌ |
+| lines_written | 1 | — |
+
+Under 300s on first attempt but two bugs required multiple rounds to fix: missing `.strip()` on name and missing `:.2f` on unit price (only applied it to total initially). Both needed hints. Final solution was a clean idiomatic one-liner. The f-string structure itself is solid — the format spec and strip are the recurring gaps.
+
+**Cross-drill trend:** 4 drills in. Speed: 483 → 293 → 175 → 278 — all recent drills under 300s. Bug fixes are the new problem: two drills with substantial fix time (61s heapq, 1586s fstring). Idiom is clean on 3/4 drills.
+
+### Drill 5 — sorting
+
+| Metric | Value | Target |
+|---|---|---|
+| secs_to_first_done | 236s | < 300s ✅ |
+| secs_bug_fixes | 0s | 0s ✅ |
+| secs_idiomatic_delta | 178s | 0s ❌ |
+| secs_total | 414s | — |
+| hints_used | 1 | 0 — |
+| lines_written | 2 | — |
+
+Needed 1 hint for the lambda tuple key. No bugs. Idiom miss: used named variables (dept, yr) in the list comp instead of _ for unused slots. Fixed once flagged. The multi-key negation pattern itself was applied correctly.
+
+**Cross-drill trend (session complete):** Speed: 483 → 293 → 175 → 278 → 236. All but drill 1 under 300s. Bug fixes were the surprise problem today — fstring cost 1586s on two separate correctness issues. Idiom clean on heapq, sets, fstring; list-comp (wrote for loop) and sorting (unused vars) had delta.
+
+---
+
+## Session Summary — 2026-07-23
+
+| # | Category | secs_to_first_done | secs_bug_fixes | secs_idiomatic_delta | secs_total | hints | lines | clean? |
+|---|---|---|---|---|---|---|---|---|
+| 1 | heapq | 483s ❌ | 61s ❌ | 0s ✅ | 544s | 0 | 7 | ❌ |
+| 2 | list-comp | 293s ✅ | 0s ✅ | 614s ❌ | 907s | 0 | 7 | ❌ |
+| 3 | sets | 175s ✅ | 36s ❌ | 0s ✅ | 211s | 1 | 1 | ❌ |
+| 4 | fstring | 278s ✅ | 1586s ❌ | 0s ✅ | 1864s | 2 | 1 | ❌ |
+| 5 | sorting | 236s ✅ | 0s ✅ | 178s ❌ | 414s | 1 | 2 | ❌ |
+
+Sets: best result ever (175s / 0s). Fstring: idiom clean 3rd consecutive session. Heapq: idiom clean 2nd consecutive session. List-comp: speed finally consistent but idiom instinct still not there. Sorting: speed solid, idiom delta crept back in (unused vars).
+
+```
+Speed (secs_to_first_done, target ≤300s)
+
+  heapq (max=1047s)
+  03-26 #1  ████████░░░░░░░░░░░░  407s ❌
+  03-26 #2  ████████████████████  1047s ❌
+  03-27 #1  ██████████░░░░░░░░░░  541s ❌
+  03-27 #2  ███░░░░░░░░░░░░░░░░░  168s ✅
+  06-01     ████████░░░░░░░░░░░░  409s ❌
+  06-05 #1  ██████░░░░░░░░░░░░░░  319s ❌
+  06-05 #2  ████░░░░░░░░░░░░░░░░  196s ✅
+  07-23     █████████░░░░░░░░░░░  483s ❌
+
+  list-comp (max=699s)
+  03-26 #1  ███░░░░░░░░░░░░░░░░░  110s ✅
+  03-26 #2  ██████████████████░░  632s ❌
+  03-26 #3  █████████████░░░░░░░  457s ❌
+  03-27 #1  ████████████████░░░░  545s ❌
+  03-27 #2  ██████░░░░░░░░░░░░░░  218s ✅
+  06-01     ████████░░░░░░░░░░░░  272s ✅
+  06-05     ████████████████████  699s ❌
+  07-23     ████████░░░░░░░░░░░░  293s ✅
+
+  sets (max=777s)
+  03-26 #1  █████████░░░░░░░░░░░  357s ❌
+  03-26 #2  ████████████████████  777s ❌
+  03-27 #1  █████░░░░░░░░░░░░░░░  189s ✅
+  03-27 #2  ███████░░░░░░░░░░░░░  253s ✅
+  07-23     █████░░░░░░░░░░░░░░░  175s ✅
+
+  fstring (max=513s)
+  03-27 #1  ███████████████░░░░░  373s ❌
+  03-27 #2  ███████████░░░░░░░░░  281s ✅
+  03-27 #3  ███████░░░░░░░░░░░░░  173s ✅
+  06-01     ████████████████████  513s ❌
+  06-05     ███████████████░░░░░  388s ❌
+  07-23     ███████████░░░░░░░░░  278s ✅
+
+  sorting (max=729s)
+  03-26 #1  ███████████░░░░░░░░░  388s ❌
+  03-26 #2  ████████████████████  729s ❌
+  03-26 #3  ██████████████░░░░░░  508s ❌
+  03-27 #2  ██████░░░░░░░░░░░░░░  230s ✅
+  06-02     ██████████████░░░░░░  506s ❌
+  06-05     █████░░░░░░░░░░░░░░░  179s ✅
+  07-23     ██████░░░░░░░░░░░░░░  236s ✅
+
+Idiom delta (target =0s)
+
+  heapq (max=881s)
+  03-26 #1  █░░░░░░░░░░░░░░░░░░░  5s ❌
+  03-26 #2  ████████████████████  881s ❌
+  03-27 #1  ███████████░░░░░░░░░  493s ❌
+  03-27 #2  ███░░░░░░░░░░░░░░░░░  112s ❌
+  06-01     ██░░░░░░░░░░░░░░░░░░  78s ❌
+  06-05 #1  █████████████████░░░  748s ❌
+  06-05 #2  ░░░░░░░░░░░░░░░░░░░░  0s ✅
+  07-23     ░░░░░░░░░░░░░░░░░░░░  0s ✅
+
+  list-comp (max=614s)
+  03-26 #1  ██░░░░░░░░░░░░░░░░░░  76s ❌
+  03-26 #2  ████░░░░░░░░░░░░░░░░  111s ❌
+  03-26 #3  ████░░░░░░░░░░░░░░░░  126s ❌
+  03-27 #1  █░░░░░░░░░░░░░░░░░░░  45s ❌
+  03-27 #2  █████████░░░░░░░░░░░  283s ❌
+  06-01     ██░░░░░░░░░░░░░░░░░░  75s ❌
+  06-05     █░░░░░░░░░░░░░░░░░░░  44s ❌
+  07-23     ████████████████████  614s ❌
+
+  sets (max=511s)
+  03-26 #1  ░░░░░░░░░░░░░░░░░░░░  0s ✅
+  03-26 #2  ███░░░░░░░░░░░░░░░░░  87s ❌
+  03-27 #1  ███░░░░░░░░░░░░░░░░░  71s ❌
+  03-27 #2  ██░░░░░░░░░░░░░░░░░░  40s ❌
+  06-02     ████████████████████  511s ❌
+  06-05     ███░░░░░░░░░░░░░░░░░  77s ❌
+  07-23     ░░░░░░░░░░░░░░░░░░░░  0s ✅
+
+  fstring (max=203s)
+  03-27 #1  █████░░░░░░░░░░░░░░░  55s ❌
+  03-27 #2  ████████████████████  203s ❌
+  03-27 #3  ████████░░░░░░░░░░░░  82s ❌
+  06-01     ░░░░░░░░░░░░░░░░░░░░  0s ✅
+  06-05     ░░░░░░░░░░░░░░░░░░░░  0s ✅
+  07-23     ░░░░░░░░░░░░░░░░░░░░  0s ✅
+
+  sorting (max=178s)
+  03-26 #1  ░░░░░░░░░░░░░░░░░░░░  0s ✅
+  03-26 #2  ██████████████░░░░░░  123s ❌
+  03-26 #3  ░░░░░░░░░░░░░░░░░░░░  0s ✅
+  03-27 #1  ░░░░░░░░░░░░░░░░░░░░  0s ✅
+  03-27 #2  ░░░░░░░░░░░░░░░░░░░░  0s ✅
+  06-02     ░░░░░░░░░░░░░░░░░░░░  0s ✅
+  06-05     ███████░░░░░░░░░░░░░  64s ❌
+  07-23     ████████████████████  178s ❌
+```

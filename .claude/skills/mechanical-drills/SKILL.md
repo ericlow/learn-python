@@ -46,8 +46,9 @@ weight = (1 / (attempts + 1)) + slow_rate + non_idiomatic_rate
 where `slow_rate` = fraction of drills where `secs_to_first_done > 300` and
 `non_idiomatic_rate` = fraction where `secs_idiomatic_delta > 0`.
 
-Pick the 5 highest-weighted categories. Fill any slots with no history using
-the least-attempted categories first.
+Pick the 5 highest-weighted categories. Exception: if any category has 0 prior
+attempts, force 1 slot to the highest-weighted among those (displacing the 5th
+highest-weighted if needed). This ensures new categories always appear.
 
 Tell the user: "Today's categories: X, X, X, X, X. Starting with drill 1/5."
 
@@ -157,3 +158,4 @@ Columns: `date,category,secs_to_first_done,secs_bug_fixes,secs_idiomatic_delta,s
   - Filter: include items that pass a naive check but should be excluded, and vice versa
   - String ops: include leading/trailing whitespace that changes the effective first character; include mixed case that breaks a lowercase-only check
   - Before finalizing input data, mentally run the 2–3 most likely wrong implementations and confirm each produces wrong output
+  - **json drills specifically**: always include at least one record with a null field — JSON `null` becomes Python `None`, and naive code calling `.fromisoformat(None)` or `int(None)` will crash. Also use `datetime.fromisoformat()` (not `strptime`) for ISO strings. If the drill involves date-range filtering, include a record that spans the target date (entered before, exited after) — a simple equality check misses it. These patterns come from a real interview (Trailer-Yard/Baton, 2025-01-21) where the 999-record dataset hid 73 null exit_times and multi-day stays that broke naive implementations.
