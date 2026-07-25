@@ -931,3 +931,201 @@ Idiom delta (target =0s)
   06-05     ███████░░░░░░░░░░░░░  64s ❌
   07-23     ████████████████████  178s ❌
 ```
+
+## 2026-07-24
+
+### Drill 1 — list-comp
+
+| Metric | Value | Target |
+|---|---|---|
+| secs_to_first_done | 190s | ≤300s ✅ |
+| secs_bug_fixes | 0s | 0s ✅ |
+| secs_idiomatic_delta | 0s | 0s ✅ |
+| secs_total | 190s | |
+| hints_used | 0 | |
+| lines_written | 1 | |
+
+Clean, fast, idiomatic on first submission. Used a single list comprehension with inline split and filter — exactly the right pattern. Contrast with last session (614s idiomatic delta) where the idiom phase broke down; today was a complete reversal.
+
+**Cross-drill trend (after 1/5):** Strong start — 0 hints, 0 bug fixes, under the 300s target.
+
+### Drill 2 — heapq
+
+| Metric | Value | Target |
+|---|---|---|
+| secs_to_first_done | 295s | ≤300s ✅ |
+| secs_bug_fixes | 0s | 0s ✅ |
+| secs_idiomatic_delta | 0s | 0s ✅ |
+| secs_total | 295s | |
+| hints_used | 0 | |
+| lines_written | 9 | |
+
+Correct on first check, 295s — just inside the target. Correctly structured the heap tuple as (priority, created_at, name) for natural sort ordering. heapify + heappop is a solid pattern; nsmallest would have been slightly more concise but equally valid.
+
+**Cross-drill trend (after 2/5):** 2 for 2 — clean submissions, no hints, both under 300s. Strong session so far.
+
+### Drill 3 — fstring
+
+| Metric | Value | Target |
+|---|---|---|
+| secs_to_first_done | 295s | ≤300s ✅ |
+| secs_bug_fixes | 31s | 0s ❌ |
+| secs_idiomatic_delta | 124s | 0s ❌ |
+| secs_total | 450s | |
+| hints_used | 1 | |
+| lines_written | 5 | |
+
+Used hyphen instead of em dash (copy detail) and initially reached for range(len()) instead of enumerate — needed a hint and two correction rounds. The f-string formatting itself (:.2f) was correct. Key takeaway: enumerate is the default when you need index + value.
+
+**Cross-drill trend (after 3/5):** First blemishes of the session — bug fix time and idiom delta both non-zero. Drills 1-2 were clean; drill 3 shows enumerate isn't automatic yet.
+
+### Drill 4 — sets
+
+| Metric | Value | Target |
+|---|---|---|
+| secs_to_first_done | 114s | ≤300s ✅ |
+| secs_bug_fixes | 90s | 0s ❌ |
+| secs_idiomatic_delta | 0s | 0s ✅ |
+| secs_total | 204s | |
+| hints_used | 0 | |
+| lines_written | 2 | |
+
+Set intersection was immediate and correct. Bugs were output-shape errors: converted to int instead of keeping strings, and forgot to sort. No hints needed; idiom was clean once correct. Key watch: track return type through the whole expression.
+
+**Cross-drill trend (after 4/5):** secs_bug_fixes is the theme today — drills 3 and 4 both had non-zero fix time. Speed and idioms are otherwise solid.
+
+### Drill 5 — json
+
+| Metric | Value | Target |
+|---|---|---|
+| secs_to_first_done | 403s | ≤300s ❌ |
+| secs_bug_fixes | 0s | 0s ✅ |
+| secs_idiomatic_delta | 108s | 0s ❌ |
+| secs_total | 511s | |
+| hints_used | 3 | |
+| lines_written | 3 | |
+
+First json drill — needed hints for json.loads, None (not Null), and tuple syntax in list comp. Logic was sound once the mechanics were in place; no bugs after the hints. Key things to memorize: json.loads() to parse, null→None, and sorted(key=lambda) for sorting dicts.
+
+**Cross-drill trend (after 5/5):** Session ended on a harder note — json was new territory and it showed (3 hints). Drills 1-2 were the cleanest. Bug fixes and idiom deltas crept in on drills 3-5.
+
+---
+
+## Session Summary — 2026-07-24
+
+| # | Category | secs_to_first_done | secs_bug_fixes | secs_idiomatic_delta | secs_total | hints | lines | clean_submit |
+|---|---|---|---|---|---|---|---|---|
+| 1 | list-comp | 190s | 0s | 0s | 190s | 0 | 1 | ✅ |
+| 2 | heapq | 295s | 0s | 0s | 295s | 0 | 9 | ✅ |
+| 3 | fstring | 295s | 31s | 124s | 450s | 1 | 5 | ❌ |
+| 4 | sets | 114s | 90s | 0s | 204s | 0 | 2 | ❌ |
+| 5 | json | 403s | 0s | 108s | 511s | 3 | 3 | ❌ |
+
+Intra-session: clean starts (drills 1-2), degraded on drills 3-5. Hints 0,0,1,0,3 — json was unfamiliar territory.
+
+### Cross-session ASCII charts
+
+**list-comp speed (max=699s)**
+```
+03-26 #1  ███░░░░░░░░░░░░░░░░░  110s ✅
+03-26 #2  ██████████████████░░  632s ❌
+03-26 #3  █████████████░░░░░░░  457s ❌
+03-27 #1  ████████████████░░░░  545s ❌
+03-27 #2  ██████░░░░░░░░░░░░░░  218s ✅
+06-01     ████████░░░░░░░░░░░░  272s ✅
+06-05     ████████████████████  699s ❌
+07-23     ████████░░░░░░░░░░░░  293s ✅
+07-24     █████░░░░░░░░░░░░░░░  190s ✅
+```
+
+**list-comp idiom delta (max=614s)**
+```
+03-26 #1  ██░░░░░░░░░░░░░░░░░░   76s ❌
+03-26 #2  ████░░░░░░░░░░░░░░░░  111s ❌
+03-26 #3  ████░░░░░░░░░░░░░░░░  126s ❌
+03-27 #1  █░░░░░░░░░░░░░░░░░░░   45s ❌
+03-27 #2  █████████░░░░░░░░░░░  283s ❌
+06-01     ██░░░░░░░░░░░░░░░░░░   75s ❌
+06-05     █░░░░░░░░░░░░░░░░░░░   44s ❌
+07-23     ████████████████████  614s ❌
+07-24     ░░░░░░░░░░░░░░░░░░░░    0s ✅
+```
+
+**heapq speed (max=1047s)**
+```
+03-26 #1  ████████░░░░░░░░░░░░  407s ❌
+03-26 #2  ████████████████████  1047s ❌
+03-27 #1  ██████████░░░░░░░░░░  541s ❌
+03-27 #2  ███░░░░░░░░░░░░░░░░░  168s ✅
+06-01     ████████░░░░░░░░░░░░  409s ❌
+06-05 #1  ██████░░░░░░░░░░░░░░  319s ❌
+06-05 #2  ████░░░░░░░░░░░░░░░░  196s ✅
+07-23     █████████░░░░░░░░░░░  483s ❌
+07-24     █████░░░░░░░░░░░░░░░  295s ✅
+```
+
+**heapq idiom delta (max=881s)**
+```
+03-26 #1  ░░░░░░░░░░░░░░░░░░░░    5s ❌
+03-26 #2  ████████████████████  881s ❌
+03-27 #1  ███████████░░░░░░░░░  493s ❌
+03-27 #2  ██░░░░░░░░░░░░░░░░░░  112s ❌
+06-01     ██░░░░░░░░░░░░░░░░░░   78s ❌
+06-05 #1  █████████████████░░░  748s ❌
+06-05 #2  ░░░░░░░░░░░░░░░░░░░░    0s ✅
+07-23     ░░░░░░░░░░░░░░░░░░░░    0s ✅
+07-24     ░░░░░░░░░░░░░░░░░░░░    0s ✅
+```
+
+**fstring speed (max=513s)**
+```
+03-27 #1  ██████████████░░░░░░  373s ❌
+03-27 #2  ███████████░░░░░░░░░  281s ✅
+03-27 #3  ██████░░░░░░░░░░░░░░  173s ✅
+06-01     ████████████████████  513s ❌
+06-05     ███████████████░░░░░  388s ❌
+07-23     ██████████░░░░░░░░░░  278s ✅
+07-24     ███████████░░░░░░░░░  295s ✅
+```
+
+**fstring idiom delta (max=203s)**
+```
+03-27 #1  █████░░░░░░░░░░░░░░░   55s ❌
+03-27 #2  ████████████████████  203s ❌
+03-27 #3  ████████░░░░░░░░░░░░   82s ❌
+06-01     ░░░░░░░░░░░░░░░░░░░░    0s ✅
+06-05     ░░░░░░░░░░░░░░░░░░░░    0s ✅
+07-23     ░░░░░░░░░░░░░░░░░░░░    0s ✅
+07-24     ████████████░░░░░░░░  124s ❌
+```
+
+**sets speed (max=777s)**
+```
+03-26 #1  █████████░░░░░░░░░░░  357s ❌
+03-26 #2  ████████████████████  777s ❌
+03-27 #1  ████░░░░░░░░░░░░░░░░  189s ✅
+03-27 #2  ██████░░░░░░░░░░░░░░  253s ✅
+07-23     ████░░░░░░░░░░░░░░░░  175s ✅
+07-24     ███░░░░░░░░░░░░░░░░░  114s ✅
+```
+
+**sets idiom delta (max=511s)**
+```
+03-26 #1  ░░░░░░░░░░░░░░░░░░░░    0s ✅
+03-26 #2  ███░░░░░░░░░░░░░░░░░   87s ❌
+03-27 #1  ██░░░░░░░░░░░░░░░░░░   71s ❌
+03-27 #2  █░░░░░░░░░░░░░░░░░░░   40s ❌
+06-02     ████████████████████  511s ❌
+06-05     ███░░░░░░░░░░░░░░░░░   77s ❌
+07-23     ░░░░░░░░░░░░░░░░░░░░    0s ✅
+07-24     ░░░░░░░░░░░░░░░░░░░░    0s ✅
+```
+
+**json** — first appearance: 403s / 0s bugs / 108s idiom delta / 3 hints
+
+### Callouts
+- list-comp idiom: first ever 0s after 8 attempts — breakthrough
+- heapq idiom: 3 consecutive 0s — solidified
+- fstring idiom: regression after 3 clean sessions — enumerate gap
+- json: baseline set, mechanics to memorize: json.loads(), None check, sorted(key=lambda)
+- Recurring: output shape bugs — read the return type before writing the list comp

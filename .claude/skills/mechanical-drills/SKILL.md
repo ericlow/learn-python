@@ -23,12 +23,11 @@ is always trivial in scope — the only challenge is writing it correctly and fa
 | `fstring` | Basic string formatting | `f"{x}"`, `f"{x:.2f}"`, `f"{x} {y}"` — no alignment, no zero-padding |
 | `list-comp` | Filter + transform in one pass | Condition in `if` clause, chained method calls, no nested comps |
 | `string-ops` | Common string manipulation | `split()`, `join()`, `strip()`, `replace()`, `startswith()` — no `title()`, `zfill()`, or format codes |
-| `json` | Basic JSON parsing | `json.loads()`, `json.dumps()`, single-level and one-level nested key access — no serialization edge cases |
+| `json` | JSON parsing with real-world field types | `json.loads()`, string/int field access, `None` checks for JSON `null`, `datetime.fromisoformat()` for date fields — every drill must exercise all four: string, int, null, and date |
 | `date` | Basic date handling | `datetime.strptime()` with common formats (`%Y-%m-%d`, `%H:%M`), `timedelta` arithmetic — no `strftime` format trivia |
 | `sets` | Set operations | Construction, `union`, `intersection`, `difference`, `in` membership |
 | `heapq` | Priority queue patterns | `heappush`, `heappop`, `nlargest`/`nsmallest`, tuple entries for tie-breaking |
 | `deque` | Queue and window patterns | `appendleft`, `popleft`, `maxlen`; BFS queue and sliding window |
-| `stdin-parse` | Input parsing | `split()`, `strip()`, `int()`/`float()` conversion — basic only |
 | `zip-enumerate` | Paired and indexed iteration | `zip()` over two lists, `enumerate()` with index, `zip` + `dict()` to build mappings |
 | `dict-comp` | Dictionary comprehension | `{k: v for ...}`, conditional `{k: v for ... if ...}`, inverting a dict — distinct from list-comp |
 
@@ -46,13 +45,13 @@ weight = (1 / (attempts + 1)) + slow_rate + non_idiomatic_rate
 where `slow_rate` = fraction of drills where `secs_to_first_done > 300` and
 `non_idiomatic_rate` = fraction where `secs_idiomatic_delta > 0`.
 
-Pick the 5 highest-weighted categories. Exception: if any category has 0 prior
-attempts, force 1 slot to the highest-weighted among those (displacing the 5th
+Pick the 10 highest-weighted categories. Exception: if any category has 0 prior
+attempts, force 1 slot to the highest-weighted among those (displacing the 10th
 highest-weighted if needed). This ensures new categories always appear.
 
-Tell the user: "Today's categories: X, X, X, X, X. Starting with drill 1/5."
+Tell the user: "Today's categories: X, X, X, X, X, X, X, X, X, X. Starting with drill 1/10."
 
-### Step 2 — Per-drill loop (repeat 5 times)
+### Step 2 — Per-drill loop (repeat 10 times)
 
 **Present the drill**
 - Show category label, problem statement, and a single input/output example. Nothing else — do not call out tricky details, edge cases, or hints in the presentation.
@@ -110,7 +109,7 @@ Tell the user: "Today's categories: X, X, X, X, X. Starting with drill 1/5."
 
 ### Step 3 — Session summary
 
-After all 5 drills, print a table:
+After all 10 drills, print a table:
 
 | # | Category | secs_to_correct | secs_idiomatic_delta | secs_total | hints | lines | clean_submit |
 |---|---|---|---|---|---|---|---|
