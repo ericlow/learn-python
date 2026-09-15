@@ -3,9 +3,6 @@
 ## What This File Is
 Routing and formatting rules that apply to every interaction. Session mechanics, coaching behavior, time tracking, and problem generation are in skills — not here.
 
-## Repo Sync
-Changes to skills and CLAUDE.md are pushed from the `technical-interviews` repo into this one. Do not edit skills or CLAUDE.md directly here.
-
 ---
 
 ## Problem Type Selection
