@@ -1129,3 +1129,259 @@ Intra-session: clean starts (drills 1-2), degraded on drills 3-5. Hints 0,0,1,0,
 - fstring idiom: regression after 3 clean sessions — enumerate gap
 - json: baseline set, mechanics to memorize: json.loads(), None check, sorted(key=lambda)
 - Recurring: output shape bugs — read the return type before writing the list comp
+
+---
+
+## 2026-07-26 — Session
+
+### Drill 1 — json
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 635s | ≤300s | ❌ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 1384s | 0s | ❌ |
+| secs_total | 2019s | — | |
+| hints | 4 | — | |
+| lines | 4 | — | |
+
+Key errors: used `json.load` instead of `json.loads`; `sorted()` result not assigned; `datetime.fromisoformat` not used in sort key initially. Idiom delta inflated by interruption — not a true measurement.
+
+### Drill 2 — heapq
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 332s | ≤300s | ❌ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 182s | 0s | ❌ |
+| secs_total | 514s | — | |
+| hints | 0 | — | |
+| lines | 2 | — | |
+
+Correct on first check. Got the negation pattern right immediately. Idiom delta: started with heappush+nsmallest mix, refactored to clean nsmallest one-liner after discussion. Asked good conceptual question about nlargest — understood why string negation makes it awkward.
+
+### Drill 3 — list-comp
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 125s | ≤300s | ✅ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 213s | 0s | ❌ |
+| secs_total | 338s | — | |
+| hints | 1 | — | |
+| lines | 1 | — | |
+
+Fast and correct. Double-split was the idiom gap — learned maxsplit=1 during session and applied it, but didn't eliminate the double call. Generator unpacking pattern still unfamiliar.
+
+### Drill 4 — fstring
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 177s | ≤300s | ✅ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| secs_total | 177s | — | |
+| hints | 0 | — | |
+| lines | 1 | — | |
+
+Clean submit. Inline arithmetic inside f-string with format spec — no intermediate variables needed.
+
+### Drill 5 — sets
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 158s | ≤300s | ✅ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| secs_total | 158s | — | |
+| hints | 0 | — | |
+| lines | 2 | — | |
+
+Clean submit. Set difference then filter — correct pattern. Minor: redundant list brackets inside sorted().
+
+### Drill 6 — sorting
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 220s | ≤300s | ✅ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| secs_total | 220s | — | |
+| hints | 1 | — | |
+| lines | 1 | — | |
+
+Clean submit. Got tuple key with negation right. Syntax error on first attempt (positional lambda instead of key=) — needed reminder about keyword argument.
+
+---
+
+### Session Summary (6 drills completed)
+
+| # | Category | secs_to_correct | secs_idiomatic_delta | secs_total | hints | lines | clean_submit |
+|---|---|---|---|---|---|---|---|
+| 1 | json | 635 | 1384* | 2019 | 4 | 4 | ✅ |
+| 2 | heapq | 332 | 182 | 514 | 0 | 2 | ✅ |
+| 3 | list-comp | 125 | 213 | 338 | 1 | 1 | ✅ |
+| 4 | fstring | 177 | 0 | 177 | 0 | 1 | ✅ |
+| 5 | sets | 158 | 0 | 158 | 0 | 2 | ✅ |
+| 6 | sorting | 220 | 0 | 220 | 1 | 1 | ✅ |
+
+*json idiom delta inflated by interruption.
+
+Intra-session: speed settled 125–220 after drill 1 stumble. 6/6 clean submits. Last 3 drills: idiom delta = 0.
+
+Cross-session priorities: json (slow+hinting), heapq (idiom regression), list-comp (double-split).
+
+---
+
+## 2026-07-27 — Session
+
+### Drill 1 — sorting
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 267s | ≤300s | ✅ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| secs_total | 267s | — | |
+| hints | 0 | — | |
+| lines | 1 | — | |
+
+Clean submit.
+
+### Drill 2 — sorting
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 565s | ≤300s | ❌ |
+| secs_bug_fixes | 480s | 0s | ❌ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| secs_total | 1045s | — | |
+| hints | 0 | — | |
+| lines | 1 | — | |
+
+Slow start and correctness bugs on a sorting drill — the extra time was spent fixing a logic error, not learning. Sorting regressions after clean runs are often output-shape errors (wrong structure returned).
+
+### Drill 3 — sorting
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 241s | ≤300s | ✅ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| secs_total | 241s | — | |
+| hints | 0 | — | |
+| lines | 2 | — | |
+
+Clean submit. Multi-key sort with negation and tiebreaker — correct pattern, no hesitation.
+
+### Drill 4 — sorting
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 312s | ≤300s | ❌ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 35s | 0s | ❌ |
+| secs_total | 347s | — | |
+| hints | 0 | — | |
+| lines | 3 | — | |
+
+Just over the speed target. Correct on first check. Idiom gap: wrote `not bool(runner["dnf"])` — `bool()` is redundant on an actual bool, `not runner["dnf"]` is the clean form.
+
+### Drill 5 — sorting
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 257s | ≤300s | ✅ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| secs_total | 257s | — | |
+| hints | 0 | — | |
+| lines | 2 | — | |
+
+Clean submit. Multi-key ascending sort — straightforward tuple key, no hesitation.
+
+### Drill 6 — sorting
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 224s | ≤300s | ✅ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| secs_total | 224s | — | |
+| hints | 0 | — | |
+| lines | 2 | — | |
+
+Clean submit. Filter-in-list-comp with negation in sort key — correct pattern applied without hesitation.
+
+### Drill 7 — sorting
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 133s | ≤300s | ✅ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| secs_total | 133s | — | |
+| hints | 0 | — | |
+| lines | 2 | — | |
+
+Clean submit. Three-key sort with negation on float — fastest drill of the session so far.
+
+### Drill 8 — sorting
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 209s | ≤300s | ✅ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| secs_total | 209s | — | |
+| hints | 0 | — | |
+| lines | 2 | — | |
+
+Clean submit. Filter in list comp, negation in sort key — pattern fully automatic now.
+
+### Drill 9 — sorting
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 141s | ≤300s | ✅ |
+| secs_bug_fixes | 0s | 0s | ✅ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| secs_total | 141s | — | |
+| hints | 0 | — | |
+| lines | 2 | — | |
+
+Clean submit. Three-key sort with mixed directions. Timer adjusted for pause.
+
+### Drill 10 — sorting
+
+| Metric | Value | Target | |
+|---|---|---|---|
+| secs_to_first_done | 103s | ≤300s | ✅ |
+| secs_bug_fixes | 10s | 0s | ❌ |
+| secs_idiomatic_delta | 0s | 0s | ✅ |
+| secs_total | 113s | — | |
+| hints | 0 | — | |
+| lines | 2 | — | |
+
+Fastest drill of the session. Missed the `total >= 100` filter on first submit — fixed in ~10s once spotted. Bug was an omission (forgot the filter), not a logic error.
+
+---
+
+### Session Summary (10 drills completed)
+
+| # | secs_to_first_done | secs_bug_fixes | secs_idiomatic_delta | secs_total | hints | lines | clean_submit |
+|---|---|---|---|---|---|---|---|
+| 1 | 267s | 0 | 0 | 267s | 0 | 1 | ✅ |
+| 2 | 565s | 480 | 0 | 1045s | 0 | 1 | ❌ |
+| 3 | 241s | 0 | 0 | 241s | 0 | 2 | ✅ |
+| 4 | 312s | 0 | 35 | 347s | 0 | 3 | ✅ |
+| 5 | 257s | 0 | 0 | 257s | 0 | 2 | ✅ |
+| 6 | 224s | 0 | 0 | 224s | 0 | 2 | ✅ |
+| 7 | 133s | 0 | 0 | 133s | 0 | 2 | ✅ |
+| 8 | 209s | 0 | 0 | 209s | 0 | 2 | ✅ |
+| 9 | 141s | 0 | 0 | 141s | 0 | 2 | ✅ |
+| 10 | 103s | 10 | 0 | 113s | 0 | 2 | ❌ |
+
+Intra-session: speed trend strongly downward after drill 2 stumble — last 5 drills averaged 165s. Idiom delta appeared only once (drill 4, minor). 0 hints across all 10. Two non-clean submits: drill 2 (logic bug) and drill 10 (filter omission).
+
+Cross-session: sorting speed has converged from ~540s avg (March) to sub-200s by end of today. Idiom gaps rare and shrinking. Main remaining risk: filter omissions when spec combines filter + sort — read the full spec before writing.
