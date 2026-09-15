@@ -135,21 +135,17 @@ Compute per problem:
 
 ---
 
-## Step 4 — Debrief
+## Step 4 — Debrief & record
 
-After both problems:
+After both problems, print the session table:
 
 | # | problem_id | parse/manip | 1st submit | 1st pass | final pass | debug | total | hints | lines |
 |---|---|---|---|---|---|---|---|---|---|
 
-- **First-submit pass rate is the headline metric** — on a real take-home you often
-  can't iterate freely. Call it out explicitly.
-- Cross-session: group prior rows by `manip` technique — is first-submit accuracy
-  trending up? Which edge-case types (empty / ties / exact-format) keep biting?
-- Close with the single edge-case habit to drill next (e.g. "always test empty input
-  before submitting").
-
-Append one row per problem to `coderbyte_metrics.csv`.
+**First-submit pass rate is the headline** — on a real take-home you can't iterate
+freely, so call it out. Then persist BOTH artifacts:
+- Append one row per problem to `coderbyte_metrics.csv`.
+- Append a dated narrative block per problem to `coderbyte_reviews.md` (schema below).
 
 ---
 
@@ -163,3 +159,16 @@ Columns: `date,problem_id,parse,manip,difficulty,est_min,secs_to_first_submit,hi
 - `hidden_tests_passed_first`: the realism metric — want this == `hidden_tests_total`
 - `secs_debug`: first submit → all-pass/reveal
 - `lines_written`: non-blank, non-comment lines at final
+
+---
+
+## coderbyte_reviews.md
+
+Path: `/Users/eric/projects/learn-python/coderbyte_reviews.md`
+Narrative history, mirroring `drill_reviews.md`. Per session add a
+`## YYYY-MM-DD — Session N` header, then per problem a
+`### {problem_id} — {parse}/{manip}` block with:
+- The metrics table with ✅/❌ vs targets (1st submit ≤ `est_min`*60; 1st pass == total; debug 0; hints 0).
+- **Analysis:** which hidden cases failed and the root-cause bug or wrong assumption.
+- **Pattern to internalize:** the edge-case habit that would have caught it.
+- **Cross-session trend:** for this `manip` technique, is first-submit accuracy improving, and which edge-case types (empty / ties / exact-format) keep biting?
