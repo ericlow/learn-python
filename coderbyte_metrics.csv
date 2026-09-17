@@ -1,0 +1,3 @@
+date,problem_id,parse,manip,difficulty,est_min,secs_to_first_submit,hidden_tests_total,hidden_tests_passed_first,secs_debug,hidden_tests_passed_final,secs_total,hints_used,lines_written
+2026-09-16,log-error-summary,extract,count-sum,medium,20,2470,7,5,706,7,3176,8,20
+2026-09-16,paginate-report,delimited,merge-reshape,medium,15,527,7,0,364,7,891,0,18

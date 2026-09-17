@@ -1,6 +1,11 @@
 # files created for drilling
 drills
 problems
+coderbyte/problem_1.py
+coderbyte/problem_2.py
+
+# macOS
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

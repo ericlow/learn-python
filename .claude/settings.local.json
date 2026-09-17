@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(algo-problem-gen)",
+      "Skill(interview-coach)",
+      "Bash(git add *)",
+      "Bash(git restore *)",
+      "Bash(git commit *)",
+      "Bash(git checkout *)",
+      "Bash(python3.13 --version)",
+      "Bash(.venv/bin/python solution.py)",
+      "Skill(mechanical-drills)",
+      "Bash(.venv/bin/python *)"
+    ]
+  }
+}

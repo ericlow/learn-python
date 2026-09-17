@@ -26,9 +26,6 @@ defining traits this skill enforces:
 4. **Unassisted by default.** It's a take-home. No hints unless the user explicitly
    asks; if they do, deliver it but flag `hints_used`.
 
-This is harder and more realistic than combo-drills/fundamentals-screen, which reveal
-the tricky case up front. Here the user must anticipate edge cases blind.
-
 ---
 
 ## Problem Pool
@@ -41,8 +38,11 @@ problems that don't feel alike.
 
 `parse`: `delimited` (CSV/kv/lines) · `nested` (brackets/config) · `tokens`
 (expression/sequence) · `encoded` (RLE/cipher) · `extract` (freeform, find/match).
-`manip`: `group-agg` · `sort-rank` · `merge-reshape` · `window` · `grid` ·
+`manip`: `group-agg` · `sort-rank` · `merge-reshape` · `window` ·
 `replay` (stateful) · `count-sum`.
+
+Keep out named-algorithm/LeetCode patterns (interval merge, spiral traversal) — they
+test algorithm recall, not data manipulation. Every problem must be plain parse-and-transform.
 
 Difficulty is calibrated to the real thing: ~20 min/problem, exact output, 2–3 real
 edge cases. No standalone toys — the once-trivial mechanics (RLE, cipher, template)
@@ -52,13 +52,11 @@ only appear welded to a manipulation step that makes them fill a slot.
 |---|---|---|---|---|
 | `sales-by-region` | delimited | group-agg | 18 | Parse `region,product,amt` lines → totals per region, sorted desc, ties alpha |
 | `log-error-summary` | extract | count-sum | 20 | Parse `ts level msg` log lines → count errors per hour → busiest hours |
-| `merge-time-ranges` | tokens | merge-reshape | 18 | Parse `HH:MM-HH:MM` strings → merge overlaps → emit merged ranges |
 | `score-leaderboard` | delimited | sort-rank | 18 | Parse `name:score` entries → sum per name → top-N with rank, tie by name |
 | `config-depth` | nested | count-sum | 20 | Parse nested bracket/config string → report max depth / per-level counts |
 | `expr-eval-ltr` | tokens | replay | 20 | Evaluate space-delimited `+ - *` **left-to-right, no precedence** (constrained) |
 | `rle-normalize` | encoded | merge-reshape | 15 | Decode an RLE string → re-encode in canonical form (merge adjacent runs) |
 | `inventory-replay` | delimited | replay | 20 | Parse `ADD/REMOVE qty item` txns → replay → final stock sorted, reject invalid |
-| `matrix-spiral` | delimited | grid | 20 | Parse rows of ints into a grid → output spiral traversal order |
 | `csv-quoted-col` | delimited | merge-reshape | 20 | Parse CSV with quoted fields containing commas → extract/join one column |
 | `join-orders` | delimited | merge-reshape | 20 | Two record blocks → join on id → combined report, drop unmatched |
 | `querystring-norm` | delimited | count-sum | 15 | Parse `k=v&k=v`, repeated keys → normalized, keys sorted, dup policy stated |
@@ -95,9 +93,12 @@ Graded on hidden tests. P1 = {parse}/{manip}, P2 = {parse}/{manip}. Independent.
 For each problem, using the Write tool:
 - Write `coderbyte/problem_{N}.py` — overwrite any existing file (no dated names).
 - File contains: a docstring with the FULL spec (user must not need the chat), the
-  function stub with `pass`, and exactly ONE commented sample input→output.
-- Do NOT put edge cases or the hidden tests in the file. The sample must look benign;
-  the hidden tests are where the edge cases live.
+  function stub with `pass`, and — always — a runnable `if __name__ == "__main__":`
+  block calling the function on the ONE sample input and printing it (without a caller,
+  breakpoints never fire when debugging).
+- Start every file with a standard import block so the user never has to figure out imports — always the same set: `re`, `json`, `math`, `bisect`, `heapq`, `string`; `collections` (Counter, defaultdict, deque, OrderedDict); `itertools` (groupby, chain, accumulate, combinations, permutations); `datetime` (datetime, timedelta).
+- Do NOT put edge cases or the hidden tests in the file. The sample in main must look
+  benign; the hidden tests are where the edge cases live.
 
 Design the **hidden test set** (hold it yourself — do not write it to a file the user
 edits): 5–8 cases per problem covering empty input, single element, ties, boundaries,
@@ -125,7 +126,7 @@ Tell me which you're starting and say 'ready'."
    - Record `hidden_tests_passed_first`.
 4. **Iterate:** let them fix and re-submit until all pass, OR they say "reveal" (then
    show expected outputs and stop). Run `date +%s` → `t_final` at all-pass or reveal.
-   Record `hidden_tests_passed_final`.
+   Record `hidden_tests_passed_final`. On all-pass, celebrate the completed exercise with a random sound: `afplay "$(ls /Users/eric/projects/learn-python/sounds/*.mp3 | sort -R | head -1)"`.
 5. Move to the other problem.
 
 Compute per problem:
